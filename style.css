@@ -1,0 +1,22 @@
+#container {
+    display: flex;
+    width: 100vw;
+    height: 85vh;
+}
+.box1, .box2, .box3 {
+    border: 2px solid rgb(233,171,88);
+    border-radius: 5px;
+    background-color: rgba(233,171,88,.5);
+    color: #d9480f;
+    height: 92vh;
+}
+.box2 {
+    width: 25%;
+    overflow-y:scroll;
+}
+.box3 {
+    width: 25%;
+}
+#output {
+    width: 200px;
+}

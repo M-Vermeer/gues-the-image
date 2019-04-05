@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>guess image</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div id="container">
+    <div class="box1">
+        <canvas id="canvas" width="800px" height="800px"></canvas>
+    </div>
+    <div class="box2">
+        <p id="output"></p>
+    </div>
+    <div class="box3">
+        <input type="text" name="text" id="inputText" onkeypress="white_space()">
+    </div>
+
+</div>
+
+
+<script>
+    const context = canvas.getContext('2d');
+    let img = new Image();
+
+    let questions = [
+        [
+            'empire.jpg',
+            ['empire state building','empire','state building', 'empire state']
+        ],
+        [
+            'https://cdn.sanity.io/images/zp7mbokg/production/G3i4emG6B8JnTmGoN0UjgAp8-300x450.jpg',
+            ['jongen']
+        ],
+        [
+            'https://pbs.twimg.com/profile_images/1049761746771210242/hkZ-TopT_400x400.jpg',
+            ['pepega','pepe']
+        ],
+        [
+            'https://www.yachts4u.nl/previews/2015/5/29/media_31_27074_w750_h424_crop.jpg',
+            ['boot','bootje','jacht','boat']
+        ],
+        [
+            'https://assets.pinshape.com/uploads/image/file/87999/container_the-smurf-3d-printing-87999.jpg',
+            ['smurf']
+        ],
+        [
+            'https://www.alternate.nl/p/o/o/Samsung_Galaxy_J5__2017__mobiele_telefoon@@ocbwzncx_30.jpg',
+            ['samsung','telefoon','mobiel','phone','gsm','tel']
+        ],
+        [
+            'https://www.scouters.nl/wp-content/uploads/45km-auto-Canta-LX1.jpg',
+            ['auto','car']
+        ],
+        [
+            'https://cdn1.reisreport.net/wp-content/uploads/2018/04/trincomalee-strand-sri-lanka-bezienswaardigheden-1920x1080.jpg',
+            ['strand','beach','zand']
+        ],
+        [
+            'https://welingelicht-welingelichtekri.netdna-ssl.com/wp-content/uploads/2018/02/9095968_l-1-750x480.jpg',
+            ['zon','zonsondergang']
+        ],
+        [
+            'https://static.independent.co.uk/s3fs-public/thumbnails/image/2018/04/10/19/pinyon-jay-bird.jpg',
+            ['bird','vogel']
+        ]
+    ];
+
+    const index = Math.floor(Math.random() * questions.length);
+    const image = questions[index][0];
+    let possible_answers = questions[index][1];
+    img.src = image;
+
+    // console.log(possible_answers);
+
+    // generate_question();
+
+    let pixelper = 0.01;
+
+    function pixelate() {
+
+        const w = canvas.width * pixelper;
+        const h = canvas.height * pixelper;
+
+        context.mozImageSmoothingEnabled = false;
+        context.webkitImageSmoothingEnabled = false;
+        context.imageSmoothingEnabled = false;
+        context.msImageSmoothingEnabled = false;
+
+        context.drawImage(img, 0, 0, w, h);
+
+        context.drawImage(canvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
+        function pixelate_timer() {
+            if (pixelper <= 0.9) {
+                pixelper += 0.01;
+
+                const w = canvas.width * pixelper;
+                const h = canvas.height * pixelper;
+
+                context.mozImageSmoothingEnabled = false;
+                context.webkitImageSmoothingEnabled = false;
+                context.imageSmoothingEnabled = false;
+                context.msImageSmoothingEnabled = false;
+
+                context.drawImage(img, 0, 0, w, h);
+
+                context.drawImage(canvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
+
+            }
+        }
+        setInterval(pixelate_timer, 2000);
+    }
+    img.onload = pixelate;
+
+    let input = document.getElementById("inputText");
+    input.focus();
+    let arr = [];
+
+    input.addEventListener("keyup", function(event) {
+        if (event.which === 13) {
+            let answer = input.value.toLowerCase().trim();
+            for (let i = 0 ; i < possible_answers.length ; i++) {
+                if (answer === possible_answers[i]){
+                    img.src = image;
+                    pixelper = 0.9;
+                    possible_answers = questions[index][1];
+                    img.src = image;
+                    setTimeout(function(){
+                        const index = Math.floor(Math.random() * questions.length);
+                        location.reload();
+                    }, 1000);
+                }
+            }
+            let pval = answer + "<br>";
+            for (let i = 0; i < 40; i++){
+                if (arr[i] !== undefined) pval = pval + arr[i] + "<br>";
+            }
+            arr.push(answer);
+            arr.reverse();
+            document.getElementById('output').innerHTML = pval;
+            document.getElementById('inputText').value = '';
+        }
+    });
+    //copyright de zware boys
+</script>
+</body>
+
+</html>
